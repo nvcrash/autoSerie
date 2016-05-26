@@ -18,41 +18,50 @@
 #ifndef SERIAL_STRING_HXX
 #define SERIAL_STRING_HXX
 
-template <template<class CharT, class Traits, class Allocator>
-	  class Object = std::basic_string,
-	  class OutputStream,
-	  class CharT,
-	  class Traits,
-	  class Allocator,
-	  typename CATCH_TYPE(Object, std::basic_string, <CharT, Traits, Allocator>)>
-static inline void
-iwrite(OutputStream& stream,
-       const Object<CharT, Traits, Allocator>& o)
+namespace autoSerie
 {
-  debug_log("string write");
-  typename Object<CharT, Traits, Allocator>::size_type s = o.size();
-  stream.write((char*) &s, sizeof(typename Object<CharT, Traits, Allocator>::size_type));
-  stream.write((const char* const) o.c_str(), o.size() * sizeof(CharT));
+  namespace serial
+  {
+    /*
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template <template<class CharT, class Traits, class Allocator>
+	      class Object = std::basic_string,
+	      class OutputStream,
+	      class CharT,
+	      class Traits,
+	      class Allocator,
+	      typename CATCH_TYPE(Object, std::basic_string, <CharT, Traits, Allocator>)>
+    static inline void
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>:: iwrite(OutputStream& stream,
+					    const Object<CharT, Traits, Allocator>& o)
+    {
+      debug_log("string write");
+      typename Object<CharT, Traits, Allocator>::size_type s = o.size();
+      stream.write((char*) &s, sizeof(typename Object<CharT, Traits, Allocator>::size_type));
+      stream.write((const char* const) o.c_str(), o.size() * sizeof(CharT));
+    }
+
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template <template<class CharT, class Traits, class Allocator>
+	      class Object = std::basic_string,
+	      class InputStream,
+	      class CharT,
+	      class Traits,
+	      class Allocator,
+	      typename CATCH_TYPE(Object, std::basic_string, <CharT, Traits, Allocator>)>
+    static inline void
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>:: iread(InputStream& stream, Object<CharT, Traits, Allocator>& o)
+    {
+      debug_log("string read");
+      typename std::basic_string<CharT, Traits, Allocator>::size_type s;
+      stream.read((char*) &s, sizeof(typename std::basic_string<CharT, Traits, Allocator>::size_type));
+      o.reserve(s+1);
+      stream.read((char*) &(o[0]), sizeof(CharT) * s);
+      CharT* ptr = &(o[s]);
+      *ptr = '\0';
+
+    }
+    */
+  }
 }
-
-template <template<class CharT, class Traits, class Allocator>
-	  class Object = std::basic_string,
-	  class InputStream,
-	  class CharT,
-	  class Traits,
-	  class Allocator,
-	  typename CATCH_TYPE(Object, std::basic_string, <CharT, Traits, Allocator>)>
-static inline void
-iread(InputStream& stream, Object<CharT, Traits, Allocator>& o)
-{
-  debug_log("string read");
-  typename std::basic_string<CharT, Traits, Allocator>::size_type s;
-  stream.read((char*) &s, sizeof(typename std::basic_string<CharT, Traits, Allocator>::size_type));
-  o.reserve(s+1);
-  stream.read((char*) &(o[0]), sizeof(CharT) * s);
-  CharT* ptr = &(o[s]);
-  *ptr = '\0';
-
-}
-
 #endif

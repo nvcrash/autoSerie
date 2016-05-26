@@ -32,6 +32,18 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "0.0.1"
 
+/* enable support of std::array */
+#define SERIAL_STD_ARRAY 1
+
+/* enable support of std::string */
+#define SERIAL_STD_STRING 1
+
+/* enable support of std::tuple */
+#define SERIAL_STD_TUPLE 1
+
+/* enable support of std::vector */
+#define SERIAL_STD_VECTOR 1
+
 /* log2 of the network share page size */
 #define SHARED_PAGE_SIZES_BITS 11
 

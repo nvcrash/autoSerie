@@ -39,10 +39,16 @@ m4_include([m4/ax_valgrind_check.m4])
 AC_CONFIG_HEADERS([include/config.h:include/config.h.in])
 AC_DEFINE(DEVEL, 1,[0 if release, debug level otherwise])
 AC_DEFINE(SHARED_PAGE_SIZES_BITS, [11], log2 of the network share page size)
-#AC_DEFINE(SHARED_PAGE_SIZES_BITS, [11], log2 of the network share page size)
 AC_DEFINE(DEBUG_STREAM, std::cerr, [enabled if DEVEL is not 0, cerr by default for std::cerr, can be 'cout' for std::cout otherwise])
 AC_DEFINE(DEBUG_SERIAL, true, [enabled if DEVEL is not 0, true by default])
+
+AC_DEFINE(SERIAL_STD_VECTOR,1,[enable support of std::vector])
+AC_DEFINE(SERIAL_STD_TUPLE,1,[enable support of std::tuple])
+AC_DEFINE(SERIAL_STD_ARRAY,1,[enable support of std::array])
+AC_DEFINE(SERIAL_STD_STRING,1,[enable support of std::string])
+
 AC_CONFIG_MACRO_DIR(aclocal)
+
 # compiler option
 # Checks for the compiler.
 AC_PROG_CC_STDC

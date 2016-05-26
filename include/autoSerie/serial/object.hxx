@@ -18,24 +18,33 @@
 #ifndef SERIAL_OBJECT_HXX
 # define SERIAL_OBJECT_HXX
 
-template<class Object,
-	 class OutputStream,
-	 typename std::enable_if<serialized_class<Object>(), int>::type = 0>
-static inline
-void iwrite(OutputStream& stream, const Object&  o)
-{
-  debug_log("object write");
-  typename Object::template object_write<OutputStream>(stream, o);
-}
 
-template<class Object,
-	 class InputStream,
-	 typename std::enable_if<serialized_class<Object>(), int>::type = 0>
-static inline
-void iread(InputStream& stream, Object& o)
+namespace autoSerie
 {
-  debug_log("object read");
-  typename Object::template object_read<InputStream>(stream, o);
-}
+  namespace serial
+  {
 
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template<class Object,
+	     class OutputStream,
+	     typename std::enable_if<serialized_class<Object>(), int>::type>
+     void
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>:: iwrite(OutputStream& stream, const Object&  o)
+    {
+      debug_log("object write");
+      typename Object::template object_write<OutputStream>(stream, o);
+    }
+
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template<class Object,
+	     class InputStream,
+	     typename std::enable_if<serialized_class<Object>(), int>::type>
+     void
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>:: iread(InputStream& stream, Object& o)
+    {
+      debug_log("object read");
+      typename Object::template object_read<InputStream>(stream, o);
+    }
+  }
+}
 #endif

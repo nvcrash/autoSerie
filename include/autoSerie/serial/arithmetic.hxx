@@ -19,24 +19,30 @@
 #ifndef ARITHMETIC_HXX
 # define ARITHMETIC_HXX
 
-template <class Object,
-	  class OutputStream,
-	  typename std::enable_if<is_data_type<Object>(), int>::type = 0>
-static
-void iwrite(OutputStream& stream, const Object& o)
+namespace autoSerie
 {
-  debug_log("data write");
-  stream.write((const char * const) &o, sizeof(Object));
-}
+  namespace serial
+  {
 
-template <typename Object,
-	  class InputStream,
-	  typename std::enable_if<is_data_type<Object>(), int>::type = 0>
-static
-void iread(InputStream& stream, Object& o)
-{
-  debug_log("data read");
-  stream.read((char*) &o, sizeof(Object));
-}
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template <class Object,
+	      class OutputStream,
+	      typename std::enable_if<is_data_type<Object>(), int>::type>
+    void internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::iwrite(OutputStream& stream, const Object& o)
+    {
+      debug_log("data write");
+      stream.write((const char * const) &o, sizeof(Object));
+    }
 
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template <typename Object,
+	      class InputStream,
+	      typename std::enable_if<is_data_type<Object>(), int>::type>
+    void internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::iread(InputStream& stream, Object& o)
+    {
+      debug_log("data read");
+      stream.read((char*) &o, sizeof(Object));
+    }
+
+  }
 #endif

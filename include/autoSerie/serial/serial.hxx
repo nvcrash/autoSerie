@@ -17,35 +17,25 @@
 */
 #ifndef SERIAL_HXX
 # define SERIAL_HXX
-# include <type_traits>
-# include <vector>
-# include <tuple>
-# include <limits.h>
-# include "autoSerie/utils/log.hh"
 
 namespace autoSerie
 {
   namespace serial
   {
-
-#include "type_utils.hxx"
-#include "fwd.hxx"
-#include "object.hxx"
-#include "arithmetic.hxx"
-#include "tuple.hxx"
-#include "vector.hxx"
-#include "string.hxx"
-
-    template <typename Object, class OutputStream> static inline void
-    write(OutputStream& stream, const Object& o)
+    template <class SizingPolicy, class ErrorPolicy, class FlushingPolicy>
+    template <typename Object, class OutputStream>
+    inline void
+    Serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::write(OutputStream& stream, const Object& o)
     {
-      iwrite(stream, o);
+      internal.iwrite(stream, o);
     }
 
-    template <typename Object, class InputStream> static inline void
-    read(InputStream& stream, Object& o)
+    template <class SizingPolicy, class ErrorPolicy, class FlushingPolicy>
+    template <typename Object, class InputStream>
+    inline void
+    Serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::read(InputStream& stream, Object& o)
     {
-      iread(stream, o);
+      internal.iread(stream, o);
     }
 
   }

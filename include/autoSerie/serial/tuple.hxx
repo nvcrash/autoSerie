@@ -18,55 +18,66 @@
 
 #ifndef SERIAL_TUPLE_HXX
 # define SERIAL_TUPLE_HXX
-
-struct tuple_internal
+namespace autoSerie
 {
-  template<class OutputStream, std::size_t I = 0, typename... Tp>
-  static inline typename std::enable_if<I == sizeof...(Tp), void>::type
-  iwrite_tuple(const std::tuple<Tp...>&, OutputStream&)
-  { }
-
-  template<class OutputStream, std::size_t I = 0, typename... Tp>
-  static inline typename std::enable_if<I < sizeof...(Tp), void>::type
-  iwrite_tuple(const std::tuple<Tp...>& t, OutputStream& o)
+  namespace serial
   {
-    auto a = std::get<I>(t);
-    iwrite<>(o, a);
-    iwrite_tuple<OutputStream, I + 1, Tp...>(t, o);
+    /*    AUTO_SERIE___x_x___SERIAL_TPL
+    template<class OutputStream, std::size_t I = 0, typename... Tp>
+    typename std::enable_if<I == sizeof...(Tp), void>::type
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::iwrite_tuple(const std::tuple<Tp...>&, OutputStream&)
+    { }
+
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template<class OutputStream, std::size_t I = 0, typename... Tp>
+    typename std::enable_if<I < sizeof...(Tp), void>::type
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::iwrite_tuple(const std::tuple<Tp...>& t, OutputStream& o)
+    {
+      auto a = std::get<I>(t);
+      iwrite<>(o, a);
+      iwrite_tuple<OutputStream, I + 1, Tp...>(t, o);
+    }
+
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template<class OutputStream, std::size_t I = 0, typename... Tp>
+    typename std::enable_if<I == sizeof...(Tp), void>::type
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::iread_tuple(std::tuple<Tp...>&, OutputStream&)
+    { }
+
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template<class OutputStream, std::size_t I = 0, typename... Tp>
+    typename std::enable_if<I < sizeof...(Tp), void>::type
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::iread_tuple(std::tuple<Tp...>& t, OutputStream& o)
+    {
+      iread<>(o, std::get<I>(t));
+      iread_tuple<OutputStream, I + 1, Tp...>(t, o);
+    }
+
+
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template <template<typename...> typename Object = std::tuple,
+	      class InputStream,
+	      typename CATCH_TYPE(Object, std::tuple, <>),
+	      typename... Args>
+    void
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::iread(InputStream& stream, Object<Args...>& o)
+    {
+      debug_log("tuple read");
+      //iread_tuple(o, stream);
+    }
+
+    AUTO_SERIE___x_x___SERIAL_TPL
+    template <template<typename...> typename Object = std::tuple,
+	      class OutputStream,
+	      typename std::enable_if<std::is_same<Object<>, std::tuple<>>::value, int>::type = 0,
+	      typename... Args>
+    void
+    internal_serial<SizingPolicy, ErrorPolicy, FlushingPolicy>::iwrite(OutputStream& stream, const Object<Args...>& o)
+    {
+      debug_log("tuple write");
+      //iwrite_tuple(o, stream);
+    }
+    */
   }
-
-  template<class OutputStream, std::size_t I = 0, typename... Tp>
-  static inline typename std::enable_if<I == sizeof...(Tp), void>::type
-  iread_tuple(std::tuple<Tp...>&, OutputStream&)
-  { }
-
-  template<class OutputStream, std::size_t I = 0, typename... Tp>
-  static inline typename std::enable_if<I < sizeof...(Tp), void>::type
-  iread_tuple(std::tuple<Tp...>& t, OutputStream& o)
-  {
-    iread<>(o, std::get<I>(t));
-    iread_tuple<OutputStream, I + 1, Tp...>(t, o);
-  }
-};
-
-template <template<typename...> typename Object = std::tuple,
-	  class InputStream,
-	  typename CATCH_TYPE(Object, std::tuple, <>),
-	  typename... Args> static inline
-void iread(InputStream& stream, Object<Args...>& o)
-{
-  debug_log("tuple read");
-  tuple_internal::iread_tuple(o, stream);
 }
-
-template <template<typename...> typename Object = std::tuple,
-	  class OutputStream,
-	  typename std::enable_if<std::is_same<Object<>, std::tuple<>>::value, int>::type = 0,
-	  typename... Args> static inline
-void iwrite(OutputStream& stream, const Object<Args...>& o)
-{
-  debug_log("tuple write");
-  tuple_internal::iwrite_tuple(o, stream);
-}
-
 #endif
