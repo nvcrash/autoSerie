@@ -1,20 +1,13 @@
 #autoSerie "WARNING: unstable, Experimental"
 **This is not working for now**
 
-the model used for this lib is as follow (stuff mark with * is optional, non intrusively alterable, disabled by default)
-handler ---> *Compression ---> *packing ---> *escaping ---> stream.write ~~~~~ stream.read ---> *unescaping -> *unpacking -> *decompression ---> handler
-
 #PRIMARY GOALS (ordered)
 - memory allocation independant (can deserialize/serialize anywere even on stack)
 - stream independant (does not even particulary need buffuring)
 - speed
 - low memory (comes after speed)
-- compatibility within the same machines at least (you can adadpt that, but no code to maintain compatibility shall be executed if not specified)
-  and this case you will be able to use:
-  		EndianessPolicy
-		SizingPolicy
-	and use platform independant types (uint32_t for instance)
-
+- compatibility within the same endianness, types (use stdint)
+ 
 #GOALS
 - nothing is virtual but feel free to use it
 - binary only
@@ -27,19 +20,18 @@ handler ---> *Compression ---> *packing ---> *escaping ---> stream.write ~~~~~ s
   (calling reserve on vector)
   can break const because sometimes memory is just copy onto your object data
 
-- no escaping by default
 - custom stream serialization (you define a stream with a standart write and read method)
 - there is no packing of bytes in structures (direct transfer) by default
   this is for faster transfer in the case that the time for packing,
 - serialization of standart types, collection
-- you can implement custom serialization with static dispatch
+- you can implement custom serialization with static dispatch by inheriting interface
 - you can implement custom serialization with in a contiguous way (you can specify how to write and read contiguous object data)
 - compatible with standart c++ stream (but a bit overkill, you might just use boost)
 
 #Why ?
 
 serialization of Contiguous collection of objects with virtual method is at serious cost (you must write them one by one), it makes it not usable for real time data management.
-This template lib can be used outside a standart c++ stream, you actually define your stream, you could write in a device mapped in memory or in PCI bus, you just have to implement a read and a write method see .
+This template lib can be used outside a standart c++ stream, you actually define your stream, you could write in a device mapped in memory or in PCI bus, you just have to implement a read and a write method
 Sometimes buffering is to avoid and then c++ stream are simply too overkill
 
 it will soon support linked structures with ref and pointers (for the link beetween the serialized structures to be preserved)
@@ -54,6 +46,7 @@ if you attend to serialize many objects with virtual methods (even destructor) t
 because objects will be written one by one
 
 
-#Future uses
-- pointers serialization through address translation (will be handled by sharing and updating memory chunks)
+#Future features
+- address translation within the same allocator (will be handled by sharing and updating memory chunks, contiguous chunk will be detected) 
 - compression on numeric types
+- cache for data/requests
